@@ -1,0 +1,56 @@
+<!doctype html>
+
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <title>SKYNET - Histórico</title>
+    </head>
+
+    <body>
+        <button id="bt_cargadatos">Histórico</button>
+        <div id="historicos"></div>
+
+     <script>
+        $(document).ready(function(){
+            $("#historicos").html("<H2>Datos Histórico ([Fecha y Hora][Contenido][Usuario][# RT])</H2>");
+            $("#bt_cargadatos").click(function(){
+
+                $.getJSON("datos_h.json", function(result){
+                    // result es el RAIZ // dentro de raiz esta el array PERSONAS
+                    $.each(result._source, function(){
+
+                        var $listafecha ="";
+                        $.each(result._source.date, function(indice, valor){
+                            // lista de fechas
+                            $listafecha = $listafecha + "<tr><td>"+valor+"</td></tr>";
+                        });
+
+                        var $listaContenido ="";
+                        $.each(result._source.texts, function(indice, valor){
+                            // lista de Contenidos
+                            $listaContenido = $listaContenido + "<tr><td>"+valor+"</td></tr>";
+                        });
+                        var $listaUsuario ="";
+                        $.each(result._source.user_id, function(indice, valor){
+                            // lista de Usuarios
+                            $listaUsuario = $listaUsuario + "<tr><td>"+valor+"</td></tr>";
+                        });
+                        var $listart ="";
+                        $.each(result._source.retweet_count, function(indice, valor){
+                            // lista de Conteo de RT
+                            $listart = $listart + "<tr><td>"+valor+"</td></tr>";
+                        });              
+                        $("#historicos").append($listafecha, $listaContenido, $listaUsuario, $listart);
+                       
+
+                    });
+
+                });
+
+            });
+        });
+        </script>
+    </body>
+</html>
